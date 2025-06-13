@@ -1,0 +1,98 @@
+/* 1. Define the animatable custom property for the gradient angle. */
+/* This is part of the CSS Houdini API and allows for smooth animation. */
+@property --angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');    
+
+body {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+    min-height: 100vh; /* Ensure body takes full viewport height */
+    background-color: black; /* The main background for the content area */
+    color: white; /* Text color */
+    font-family: "Press Start 2P", system-ui;
+    font-weight: 400;
+            
+    /* 3. The Animated Border Effect */
+    --border-size: 20px;
+    border: var(--border-size) solid transparent;
+
+    /* Apply the conic gradient as the border's image */
+    border-image: conic-gradient(
+        from var(--angle), 
+        #ffff00, /* Yellow */
+        #00ff00, /* Lime */
+        magenta, /* Yellow */
+        #ffff00,
+        #00ff00, /* Lime */
+        magenta, /* Yellow */
+        #ffff00
+    ) 1; /* The '1' is the border-image-slice value */
+            
+    /* Apply the animation */
+    animation: rotate-border 4s linear infinite;
+}
+
+/* 4. The animation keyframes */
+@keyframes rotate-border {
+    to {
+        --angle: 360deg;
+    }
+}
+
+p{
+    font-size: 3vh;
+    text-align: center;
+}
+
+ol{
+    padding-left: 3em;
+    text-align: left;
+}
+
+ol li::marker{
+    color: yellow;
+}
+
+.container {
+    margin: 2em;
+    padding: 2em;
+    text-align: center;
+    border-radius: 2em;
+    background-color: rgb(30, 30, 30);
+    align-self: center;
+}
+
+.score{
+    font-size: 3vh;
+    color: red;
+}
+
+.credit{
+    font-size: 8vh;
+    color: red;
+}
+
+.ranking{
+    font-size: 2vh;
+}
+
+.title{
+    font-size: 5vh;
+    color: white;
+}
+
+.strength-bar {
+    height: 1.5rem; /* Give the bars some height */
+    border-radius: 0.25rem;
+}
+.bar-dashed {
+    height: 1.5rem; /* Give the bars some height */
+    border: 2px dashed #6c757d; /* A gray dashed border */
+    border-radius: 0.25rem;
+}
