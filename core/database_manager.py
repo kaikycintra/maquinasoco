@@ -1,6 +1,6 @@
 import sqlite3
 import time
-from config import DATABASE_NAME, GAME_COST
+from .config import DATABASE_NAME, GAME_COST
 
 def init_db():
     """Inicializa o banco de dados."""
