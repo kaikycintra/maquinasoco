@@ -1,6 +1,6 @@
 import time
 
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, Response, request
 from .utils import determina_nivel_soco
 from core.config import GAME_COST
 from core.database_manager import (
@@ -58,11 +58,17 @@ def saldo():
 
 @app.route('/checksoco')
 def checksoco():
+    # chamado repetidamente na tela de jogo
     estado = get_estado_banco()
     if estado == "PUNCHED":
         time.sleep(1) # delay para atualizar leitura do acelerômetro
         forca = get_leitura_acelerometro()
         nivel = determina_nivel_soco()
+        return render_template("partials/animacao_soco.html", {
+
+        })
+
+    return Response(status=204)
 
 #############################  OUTROS ############################
 
