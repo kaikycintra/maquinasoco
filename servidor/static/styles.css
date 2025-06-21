@@ -44,48 +44,6 @@ body {
     }
 }
 
-p{
-    font-size: 3vh;
-    text-align: center;
-}
-
-ol{
-    padding-left: 3em;
-    text-align: left;
-}
-
-ol li::marker{
-    color: yellow;
-}
-
-.container {
-    margin: 2em;
-    padding: 2em;
-    text-align: center;
-    border-radius: 2em;
-    background-color: rgb(30, 30, 30);
-    align-self: center;
-}
-
-.score{
-    font-size: 3vh;
-    color: red;
-}
-
-.credit{
-    font-size: 8vh;
-    color: red;
-}
-
-.ranking{
-    font-size: 2vh;
-}
-
-.title{
-    font-size: 5vh;
-    color: white;
-}
-
 .strength-bar {
     height: 1.5rem; /* Give the bars some height */
     border-radius: 0.25rem;

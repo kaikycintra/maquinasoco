@@ -1,134 +1,82 @@
-<!DOCTYPE html>
-<html lang="en">
+<main style="flex-grow: 1; display: flex; flex-direction: column;">
+    <style>
+        .ranking-list {
+            padding-left: 0;
+            list-style-position: inside;
+        }
 
-    <head>
+        .ranking-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #444;
+        }
+        
+        .ranking-list ::marker{
+            color: yellow;
+        }
+    </style>
 
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <div>
+        <h1 style="text-align: center;">SOCO FORTE</h1>
+        <h1 style="text-align: center;">Crédito: 50 REAIS</h1>
+        <h2 style="text-align: center;">5 reais por jogo</h2>
+    </div>
 
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
-        <title>Início</title>
-
-        <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
-    </head>
-
-    <body style="flex-direction: column;">
-
-        <span class="title align-self-center">SOCO FORTE</span>
-
-        <div class="container">
-
-            <div class="row">
-
-                <div class="col-md-6 align-self-center">
-
-                    <div>
-                        <h1>Score</h1>
-                        <div class="score">8390</div>
-                    </div>
-                    <div>
-                        <h1>Recorde</h1>
-                        <div class="score">9999</div>
-                    </div>
-
+    <div style="display: flex; flex-direction: column; justify-content: space-evenly; flex-grow: 1; align-items: center;">    
+        <div>
+            <h1 style="text-align: center; margin-bottom: 0.5rem;">Top Scores</h1>
+            <div class="top-scores">
+                <div class="score-item" style="font-size: 5vh;">
+                    <span><span style="color: yellow;">1.</span> JP 9999</span>
                 </div>
-
-                <div class="col-md-6">
-                    <h1>Jogadas</h1>
-                    <div class="credit">10</div>
+                <div class="score-item" style="font-size: 4.5vh;">
+                    <span><span style="color: rgb(146, 146, 146);">2.</span> Rafael 9500</span>
                 </div>
-
-            </div>
-
-        </div>
-
-        <div class="container">
-            <h1>Top Scores</h1>
-            <br>
-            <div class="row">
-                <div class="col align-self-end">
-                    <h2><span style="color: rgb(146, 146, 146);">2.</span>Rafael</h2>
-                    <div class="score" style="font-size:2vh ;">9975</div>
-                </div>
-                <div class="col">
-                    <h1><span style="color: yellow;">1.</span>JP</h1>
-                    <div class="score">9999</div>
-                </div>
-                <div class="col align-self-end">
-                    <h3><span style="color: rgb(146, 74, 38);">3.</span>Ryan</h3>
-                    <div class="score" style="font-size: 1.5vh;">8999</div>
+                <div class="score-item" style="font-size: 4vh;">
+                    <span><span style="color: rgb(146, 74, 38);">3.</span> Ryan 8999</span>
                 </div>
             </div>
-
         </div>
 
-        <div class="container"> 
-            <div style="font-size: 4vh; color: yellow;">Ranking</div>
-
-            <ol class="ranking">
+        <div> 
+            <div style="font-size: 4vh; text-align: center;">Ranking</div>
+            <ol class="ranking-list" start="4">
                 <li>
-                    <div class="row">
-                        <div class="col flex-grow-1">JP</div>
-                        <div class="col flex-grow-0" style="color: red;">9999</div>
-                    </div>
+                    <span>JP</span>
+                    <span style="color: red; text-align: end;">9999</span>
                 </li>
                 <li>
-                    <div class="row">
-                        <div class="col flex-grow-1">Rafael</div>
-                        <div class="col flex-grow-0" style="color: red;">9975</div>
-                    </div>
+                    <span>Rafael</span>
+                    <span style="color: red;">9975</span>
                 </li>
                 <li>
-                    <div class="row">
-                        <div class="col flex-grow-1">Ryan</div>
-                        <div class="col flex-grow-0" style="color: red;">8999</div>
-                    </div>
+                    <span>Ryan</span>
+                    <span style="color: red;">8999</span>
                 </li>
                 <li>
-                    <div class="row">
-                        <div class="col flex-grow-1">Kaiky</div>
-                        <div class="col flex-grow-0" style="color: red;">8712</div>
-                    </div>
+                    <span>Kaiky</span>
+                    <span style="color: red;">8712</span>
                 </li>
                 <li>
-                    <div class="row">
-                        <div class="col flex-grow-1">Kim</div>
-                        <div class="col flex-grow-0" style="color: red;">7872</div>
-                    </div>
+                    <span>Kim</span>
+                    <span style="color: red;">7872</span>
                 </li>
                 <li>
-                    <div class="row">
-                        <div class="col flex-grow-1">Carneiro</div>
-                        <div class="col flex-grow-0" style="color: red;">7871</div>
-                    </div>
+                    <span>Carneiro</span>
+                    <span style="color: red;">7871</span>
                 </li>
                 <li>
-                    <div class="row">
-                        <div class="col flex-grow-1">Gustavo</div>
-                        <div class="col flex-grow-0" style="color: red;">7534</div>
-                    </div>
+                    <span>Gustavo</span>
+                    <span style="color: red;">7534</span>
                 </li>
                 <li>
-                    <div class="row">
-                        <div class="col flex-grow-1">Vitor</div>
-                        <div class="col flex-grow-0" style="color: red;">7466</div>
-                    </div>
+                    <span>Vitor</span>
+                    <span style="color: red;">7466</span>
                 </li>
                 <li>
-                    <div class="row">
-                        <div class="col flex-grow-1">Labbe</div>
-                        <div class="col flex-grow-0" style="color: red;">6589</div>
-                    </div>
+                    <span>Labbe</span>
+                    <span style="color: red;">6589</span>
                 </li>
             </ol>
         </div>
-
-    </body>
-
-</html>
+    </div>
+</main>
