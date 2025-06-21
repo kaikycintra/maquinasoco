@@ -2,9 +2,17 @@ import time
 
 from flask import Flask, render_template, redirect, url_for, request
 from .utils import determina_nivel_soco
-from core.database_manager import reset_banco, get_saldo, get_estado_banco, get_leitura_acelerometro, \
-    cobra_jogo, get_top_10, guarda_score, get_score
 from core.config import GAME_COST
+from core.database_manager import (
+    reset_banco,
+    get_saldo,
+    get_estado_banco,
+    get_leitura_acelerometro,
+    cobra_jogo,
+    get_top_10,
+    insere_score,
+    get_score,
+    update_estado_idle)
 
 app = Flask(__name__)
 
@@ -23,6 +31,7 @@ def index():
 @app.route('/idle', methods=['GET'])
 def idle():
     # tela inicial do loop de gameplay, espera saldo
+    update_estado_idle()
     return render_template("pages/idle.html")
 
 @app.route('/jogo', methods=['GET'])
@@ -76,7 +85,7 @@ def score_post():
             "message": "Request incompleto, falta nome, CPF ou pontuação"
         })
     
-    guarda_score(cpf, nome, pontuacao) # guarda score com timestamp
+    insere_score(cpf, nome, pontuacao) # guarda score com timestamp
     return redirect(url_for(idle), code=302)
 
 @app.route('/score', methods=['GET'])
