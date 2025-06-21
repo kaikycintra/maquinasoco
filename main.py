@@ -24,19 +24,13 @@ def open_browser():
 if __name__ == '__main__':
     init_db()
 
-    web_server_thread = threading.Thread(target=run_web_server, daemon=True)
+    print("Iniciando o listener de hardware em um thread de background...")
     hardware_thread = threading.Thread(target=hardware_signal_listener, daemon=True)
-    browser_thread = threading.Thread(target=open_browser, daemon=True)
-
-    web_server_thread.start()
     hardware_thread.start()
+
+    print("Iniciando o browser em uma thread de background...")
+    browser_thread = threading.Thread(target=open_browser, daemon=True)
     browser_thread.start()
 
-    print("Aplicação principal iniciada. Pressione Ctrl+C para sair.")
-    try:
-        while True:
-            time.sleep(1) 
-    except KeyboardInterrupt:
-        print("\nEncerrando aplicação...")
-    finally:
-        print("Threads finalizadas.")
+    print("Iniciando o servidor na thread principal")
+    run_web_server()
