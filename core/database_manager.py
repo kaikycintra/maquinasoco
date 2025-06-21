@@ -81,10 +81,9 @@ def get_estado_banco():
     return row['current_state']
 
 def get_leitura_acelerometro():
-    """Busca a força do último soco registrado no banco de dados."""
+    """Busca a aceleração."""
     conn = _get_db_connection()
     cursor = conn.cursor()
-    # Assume que a leitura desejada é a do último registro na tabela score
     cursor.execute("SELECT acceleration FROM machine_state WHERE id=1")
     row = cursor.fetchone()
     conn.close()
@@ -170,17 +169,14 @@ def insere_credito(valor: int):
     print(f"{valor} crédito(s) inserido(s). Novo saldo: {new_credits}.")
     conn.close()
 
-def insere_soco(cpf: str, nome: str, force: int):
+def insere_soco(force):
     """
     Registra um soco no sistema.
-    Guarda a pontuação e atualiza o estado da máquina para 'PUNCHED',
-    registrando a força do soco.
+    Atualiza o estado da máquina para 'PUNCHED', registrando a força do soco.
     """
     conn = _get_db_connection()
     cursor = conn.cursor()
-    timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
-    cursor.execute("INSERT INTO score (cpf, nome, force, timestamp) VALUES (?, ?, ?, ?)", (cpf, nome, force, timestamp))
     cursor.execute("UPDATE machine_state SET current_state = 'PUNCHED', acceleration = ? WHERE id = 1", (force,))
     conn.commit()
-    print(f"Soco registrado para {nome} com força {force}. Estado da máquina: PUNCHED.")
+    print(f"Soco registrado com força {force}. Estado da máquina: PUNCHED.")
     conn.close()
