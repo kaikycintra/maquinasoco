@@ -1,0 +1,80 @@
+<main class="score-animation-container"
+      hx-get="{{ url_for('gameover') }}"
+      hx-trigger="load delay:5s"
+      hx-swap="outerHTML">
+
+    <div id="score-display" class="score-display">0</div>
+
+    <div class="triangle-container">
+        <div class="tri-bar" style="width: 30%;" data-threshold="7000">
+            <div class="tri-bar-fill fill-red" style="animation-delay: 0.7s;"></div>
+        </div>
+        <div class="tri-bar" style="width: 40%;" data-threshold="7000">
+            <div class="tri-bar-fill fill-red" style="animation-delay: 0.6s;"></div>
+        </div>
+        <div class="tri-bar" style="width: 50%;" data-threshold="3000">
+            <div class="tri-bar-fill fill-yellow" style="animation-delay: 0.5s;"></div>
+        </div>
+        <div class="tri-bar" style="width: 60%;" data-threshold="3000">
+            <div class="tri-bar-fill fill-yellow" style="animation-delay: 0.4s;"></div>
+        </div>
+        <div class="tri-bar" style="width: 70%;" data-threshold="3000">
+            <div class="tri-bar-fill fill-yellow" style="animation-delay: 0.3s;"></div>
+        </div>
+        <div class="tri-bar" style="width: 80%;" data-threshold="1">
+            <div class="tri-bar-fill fill-green" style="animation-delay: 0.2s;"></div>
+        </div>
+        <div class="tri-bar" style="width: 90%;" data-threshold="1">
+            <div class="tri-bar-fill fill-green" style="animation-delay: 0.1s;"></div>
+        </div>
+        <div class="tri-bar" style="width: 100%;" data-threshold="1">
+            <div class="tri-bar-fill fill-green" style="animation-delay: 0.0s;"></div>
+        </div>
+    </div>
+    
+    <div id="punch-level-display" class="punch-level-display">{{ nivel }}</div>
+
+    <script>
+        (function() {
+            const finalScore = {{ forca }};
+            const scoreElement = document.getElementById('score-display');
+            const levelElement = document.getElementById('punch-level-display');
+
+            // 1. Seleciona todas as barras
+            const bars = document.querySelectorAll('.tri-bar');
+
+            // 2. Itera sobre cada barra e decide se ela deve ser preenchida
+            bars.forEach(bar => {
+                const threshold = parseInt(bar.dataset.threshold, 10);
+                const fillElement = bar.querySelector('.tri-bar-fill');
+
+                // Adiciona a classe de animação apenas se a pontuação atingir o necessário
+                if (finalScore >= threshold) {
+                    fillElement.classList.add('animate-fill-vertically');
+                }
+            });
+
+            // 3. Anima o contador de pontos (lógica inalterada)
+            if (finalScore === 0) {
+                scoreElement.innerText = '0';
+                levelElement.classList.add('visible');
+                return;
+            }
+            let currentScore = 0;
+            const duration = 1500;
+            const increment = Math.ceil(finalScore / (duration / 16));
+            function updateScore() {
+                currentScore += increment;
+                if (currentScore >= finalScore) {
+                    scoreElement.innerText = finalScore;
+                    scoreElement.classList.add('final');
+                    levelElement.classList.add('visible');
+                } else {
+                    scoreElement.innerText = currentScore;
+                    requestAnimationFrame(updateScore);
+                }
+            }
+            updateScore();
+        })();
+    </script>
+</main>

@@ -1,34 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layouts/base.html" %}
 
-    <head>
+{% block main %}
+<main class="gameover-container"
+      hx-get="{{ url_for('idle') }}"
+      hx-trigger="load delay:20s"
+      hx-swap="outerHTML">
 
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <h1>FIM DE JOGO</h1>
+    
+    <div class="final-score">
+        <span>SUA PONTUAÇÃO</span>
+        <p>{{ pontuacao }}</p>
+    </div>
 
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
-        <title>Login</title>
-
-        <link rel="stylesheet" href="styles.css">
-
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-
-
-    </head>
-
-    <body>
-
-        <div class="container">
-
-            <p>Insira seu CPF, entre no nosso ranking e ganhe prêmios</p>
-            <p>___.___.___-__</p>
-            <p>Se não quiser entrar apenas pressione "OK"</p>
-
-        </div>
-
-    </body>
-
-</html>
+    <form hx-post="{{ url_for('score_post') }}" class="score-form">
+        <p>Entre no ranking e ganhe prêmios!</p>
+        <input type="hidden" name="pontuacao" value="{{ pontuacao }}">
+        <input type="text" name="nome" placeholder="SEU NOME" class="retro-input" required>
+        <input type="text" name="cpf" placeholder="___.___.___-__" class="retro-input">
+        <button type="submit" class="retro-button">SALVAR</button>
+    </form>
+    
+    <button class="text-link"
+            hx-get="{{ url_for('idle') }}"
+            hx-target="body"
+            hx-swap="outerHTML">
+            Não, obrigado.
+    </button>
+</main>
+{% endblock %}

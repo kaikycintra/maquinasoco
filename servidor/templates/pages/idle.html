@@ -20,7 +20,7 @@
         <h1 style="text-align: center;"
             hx-get="{{ url_for('saldo') }}"
             hx-trigger="every 1s">Crédito: {{ saldo }} REAIS</h1>
-        <h2 style="text-align: center;">5 reais por jogo</h2>
+        <h2 style="text-align: center;">{{ custo }} reais por jogo</h2>
     </div>
     <div id="start">
     </div>

@@ -4,7 +4,8 @@ Crédito: {{ saldo }} REAIS
     <h1 style="text-align: center;">Pressione <span style="color: red;">START</span> para começar</h1>
     <div hx-get="{{ url_for('jogar') }}"
          hx-trigger="every 1s"
-         hx-target="main">
+         hx-target="main"
+         hx-swap="outerHTML">
     </div>
 </div>
 {% endif %}

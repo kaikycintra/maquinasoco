@@ -116,3 +116,154 @@ body {
         transform: translateX(0);
     }
 }
+
+/* Estilo para a tela de jogo */
+
+.titulo-jogo {
+    text-align: center;
+    animation: pulse-glow 1.5s infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% {
+        transform: scale(1);
+        text-shadow: 0 0 7px #ffff00;
+    }
+    50% {
+        transform: scale(1.05);
+        text-shadow: 0 0 25px #ffff00;
+    }
+}
+
+/* --- Estilos para a Animação de Pontuação --- */
+/* --- Estilos para a Animação de Pontuação --- */
+.score-animation-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 60%;
+}
+
+.score-display {
+    font-size: 8rem;
+    color: yellow;
+    text-shadow: 0 0 15px red;
+    margin-bottom: 2rem;
+    transition: transform 0.3s ease-in-out;
+}
+
+.score-display.final {
+    transform: scale(1.2);
+}
+
+.triangle-container {
+    width: 90%; /* Aumentado para barras mais largas */
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tri-bar {
+    height: 2.2rem; /* Barras um pouco mais altas */
+    border: 2px solid white;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    padding: 3px;
+    box-sizing: border-box;
+}
+
+.tri-bar-fill {
+    height: 100%;
+    width: 100%;
+    border-radius: 3px;
+    /* Configuração para a animação vertical */
+    transform: scaleY(0);
+    transform-origin: bottom; /* Garante que o preenchimento cresça de baixo para cima */
+}
+
+/* Classe adicionada via JS para iniciar a animação */
+.tri-bar-fill.animate-fill-vertically {
+    animation: fill-bar-vertically 0.4s ease-in-out forwards;
+}
+
+/* Animação de preenchimento vertical */
+@keyframes fill-bar-vertically {
+    to {
+        transform: scaleY(1);
+    }
+}
+
+.fill-green { background-color: #28a745; }
+.fill-yellow { background-color: #ffc107; }
+.fill-red { background-color: #dc3545; }
+
+.punch-level-display {
+    font-size: 3rem;
+    margin-top: 2rem;
+    color: white;
+    text-shadow: 0 0 10px yellow;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s 0.5s, transform 0.5s 0.5s;
+}
+
+.punch-level-display.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+/* --- Estilos da Tela de Game Over --- */
+.gameover-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    height: 100%;
+}
+
+.final-score {
+    text-align: center;
+}
+.final-score span {
+    font-size: 1.5rem;
+}
+.final-score p {
+    font-size: 5rem;
+    color: yellow;
+    margin: 0;
+    text-shadow: 0 0 10px red;
+}
+
+.score-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    text-align: center;
+    border: 4px dashed yellow;
+    padding: 1.5rem;
+}
+
+.retro-input {
+    background-color: #222;
+    border: 2px solid #fff;
+    color: #fff;
+    padding: 10px;
+    font-family: "Press Start 2P", system-ui;
+    text-align: center;
+}
+
+.retro-button {
+    background-color: yellow;
+    color: black;
+    padding: 10px 20px;
+    font-family: "Press Start 2P", system-ui;
+    border: none;
+    cursor: pointer;
+}
+.retro-button:hover {
+    background-color: #ffc107;
+}

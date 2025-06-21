@@ -1,8 +1,6 @@
 import time
-import random
 
 from flask import Flask, render_template, redirect, url_for, Response, request
-from .utils import determina_nivel_soco
 from core.config import GAME_COST
 from core.database_manager import (
     reset_banco,
@@ -33,7 +31,8 @@ def index():
 def idle():
     # tela inicial do loop de gameplay, espera saldo e start
     update_estado_idle()
-    return render_template("pages/idle.html", saldo=get_saldo())
+    return render_template("pages/idle.html", 
+                           saldo=get_saldo(), custo=GAME_COST)
 
 @app.route('/jogo', methods=['GET'])
 def jogo():
@@ -64,17 +63,14 @@ def saldo():
     return render_template("partials/saldo.html",
         saldo=saldo, liberado=liberado)
 
-@app.route('/checksoco')
+@app.route('/checksoco', methods=['GET'])
 def checksoco():
     # chamado repetidamente na tela de jogo
     estado = get_estado_banco()
     if estado == "PUNCHED":
         time.sleep(1) # delay para atualizar leitura do acelerômetro
         forca = get_leitura_acelerometro()
-        nivel = determina_nivel_soco()
-        return render_template("partials/animacao_soco.html", {
-
-        })
+        return render_template("partials/animacao_soco.html", forca=forca)
 
     return Response(status=204)
 
