@@ -1,6 +1,7 @@
 import threading
 import time
 import subprocess
+import os
 from core.database_manager import init_db
 from servidor import run_web_server
 from hardware import hardware_signal_listener
@@ -22,15 +23,17 @@ def open_browser():
         print(f"Falha ao abrir o navegador: {e}")
 
 if __name__ == '__main__':
-    init_db()
+    # FIX: This check ensures the background threads are only started by the main
+    # Werkzeug process, not by the reloader's child process.
+    if os.environ.get("WERKZEUG_RUN_MAIN") != "true":
+        init_db()
 
-    print("Iniciando o listener de hardware em um thread de background...")
-    hardware_thread = threading.Thread(target=hardware_signal_listener, daemon=True)
-    hardware_thread.start()
+        print("Iniciando o listener de hardware em um thread de background...")
+        hardware_thread = threading.Thread(target=hardware_signal_listener, daemon=True)
+        hardware_thread.start()
 
-    print("Iniciando o browser em uma thread de background...")
-    browser_thread = threading.Thread(target=open_browser, daemon=True)
-    browser_thread.start()
+        browser_thread = threading.Thread(target=open_browser, daemon=True)
+        browser_thread.start()
 
-    print("Iniciando o servidor na thread principal")
+    # This will be executed in both processes, but the reloader logic handles it correctly.
     run_web_server()
