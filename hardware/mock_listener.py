@@ -3,9 +3,8 @@ from pynput import keyboard
 
 def start_keyboard_mock_listener():
     """Simula sinais de hardware com entrada de teclado."""
-    # Pynput listener logic
     print("\nModo Mock (pynput) - Teclas de Simulação:")
-    print("  '1', '2', '3': Simular soco (força 50)")
+    print("  '1', '2', '3': Simular soco (forças 30, 50, 90)")
     print("  '7': Inserir R$2.00")
     print("  '8': Inserir R$5.00")
     print("  '9': Inserir R$20.00")
@@ -13,19 +12,24 @@ def start_keyboard_mock_listener():
 
     def on_press(key):
         try:
-            if hasattr(key, 'char') and key.char in ['1', '2', '3']:
+            if not hasattr(key, 'char'):
+                return
+
+            char = key.char
+            if char in ['1', '2', '3']:
                 current_state = get_estado_banco()
                 if current_state == 'READY_TO_PUNCH':
                     force = '30' if char == '1' else ('50' if char == '2' else '90')
-                    print(f"Simulando soco (tecla '{key.char}' pressionada)...")
+                    print(f"Simulando soco (tecla '{char}' pressionada)...")
                     insere_soco(force)
                 else:
                     print(f"Simulação de soco ignorada. Estado: {current_state}")
-            elif hasattr(key, 'char'):
-                char = key.char
+
+            elif char in ['7', '8', '9']:
                 valor = 2 if char == '7' else (5 if char == '8' else 20)
                 insere_credito(valor)
                 print(f"Créditos (R${valor}) adicionados.")
+
         except Exception as e:
             print(f"Erro ao processar tecla: {e}")
 
