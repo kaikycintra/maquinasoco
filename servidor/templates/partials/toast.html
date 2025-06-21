@@ -1,0 +1,6 @@
+<div hx-swap-oob="beforeend:#toaster">
+    <div class="{% if success %} success-toast {% else %} error-toast {% endif %}"
+         hx-on:click="this.remove()">
+         <p>{{ message }}</p>
+    </div>
+</div>

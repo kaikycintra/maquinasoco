@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');    
+
 /* 1. Define the animatable custom property for the gradient angle. */
 /* This is part of the CSS Houdini API and allows for smooth animation. */
 @property --angle {
@@ -5,14 +7,11 @@
     initial-value: 0deg;
     inherits: false;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');    
-
 body {
     display: flex;
     justify-content: center;
     margin: 0;
-    min-height: 100vh; /* Ensure body takes full viewport height */
+    height: calc(100vh - 40px); /* Ensure body takes full viewport height */
     background-color: black; /* The main background for the content area */
     color: white; /* Text color */
     font-family: "Press Start 2P", system-ui;
@@ -95,4 +94,67 @@ ol li::marker{
     height: 1.5rem; /* Give the bars some height */
     border: 2px dashed #6c757d; /* A gray dashed border */
     border-radius: 0.25rem;
+}
+
+.text-link {
+    text-decoration: underline;
+}
+
+.text-link:hover {
+    cursor: pointer;
+}
+
+#toaster {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 350px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.success-toast, .error-toast {
+    padding: 15px;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    opacity: 0; /* Start hidden for animation */
+    animation: toast-fade-in 0.5s forwards;
+    border-left: 5px solid; /* Accent border */
+}
+
+.success-toast p, .error-toast p {
+    margin: 0;
+    font-size: 1rem; /* Adjust font size as needed */
+    font-family: "Press Start 2P", system-ui; /* Match your project's font */
+}
+
+/* Specific styles for success toasts */
+.success-toast {
+    background-color: #1f512b;
+    border-color: #28a745;
+}
+
+/* Specific styles for error toasts */
+.error-toast {
+    background-color: #5d1b21;
+    border-color: #dc3545;
+}
+
+.success-toast:hover, .error-toast:hover {
+    cursor: pointer;
+}
+
+/* Animation to fade the toasts in */
+@keyframes toast-fade-in {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
