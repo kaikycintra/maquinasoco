@@ -1,4 +1,4 @@
-from core.database_manager import insere_score, insere_credito, get_estado_banco
+from core.database_manager import insere_soco, insere_credito, get_estado_banco
 from pynput import keyboard
 
 def start_keyboard_mock_listener():
@@ -18,7 +18,7 @@ def start_keyboard_mock_listener():
                 if current_state == 'READY_TO_PUNCH':
                     force = '30' if char == '1' else ('50' if char == '2' else '90')
                     print(f"Simulando soco (tecla '{key.char}' pressionada)...")
-                    insere_score("12131415678", "kaiky", force)
+                    insere_soco(force)
                 else:
                     print(f"Simulação de soco ignorada. Estado: {current_state}")
             elif hasattr(key, 'char'):
