@@ -1,4 +1,5 @@
 import time
+import random
 
 from flask import Flask, render_template, redirect, url_for, Response, request
 from .utils import determina_nivel_soco
@@ -30,9 +31,9 @@ def index():
 
 @app.route('/idle', methods=['GET'])
 def idle():
-    # tela inicial do loop de gameplay, espera saldo
+    # tela inicial do loop de gameplay, espera saldo e start
     update_estado_idle()
-    return render_template("pages/idle.html")
+    return render_template("pages/idle.html", saldo=get_saldo())
 
 @app.route('/jogo', methods=['GET'])
 def jogo():
@@ -53,8 +54,9 @@ def gameover():
 def saldo():
     # chamado repetidamente na tela idle
     saldo = get_saldo()
+    liberado = saldo >= GAME_COST
     return render_template("partials/saldo.html",
-        saldo=saldo)
+        saldo=saldo, liberado=liberado)
 
 @app.route('/checksoco')
 def checksoco():
