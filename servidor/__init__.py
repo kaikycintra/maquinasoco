@@ -53,9 +53,8 @@ def gameover():
 def saldo():
     # chamado repetidamente na tela idle
     saldo = get_saldo()
-    return render_template("partials/saldo.html", {
-        "saldo": saldo
-    })
+    return render_template("partials/saldo.html",
+        saldo=saldo)
 
 @app.route('/checksoco')
 def checksoco():
@@ -73,13 +72,12 @@ def checksoco():
 
 #############################  OUTROS ############################
 
-@app.route('/reset', methods=['POST'])
+@app.route('/reset', methods=['DELETE'])
 def reset():
     reset_banco()
-    return render_template("partials/toast.html", {
-        "sucess": True,
-        "message": "Dados reiniciados com sucesso!"
-    })
+    return render_template("partials/toast.html",
+        success=True,
+        message="Dados reiniciados com sucesso!")
 
 @app.route('/score', methods=['POST'])
 def score_post():
@@ -87,10 +85,9 @@ def score_post():
     nome = request.form.get('nome')
     pontuacao = request.form.get('pontuacao')
     if not (nome or cpf or pontuacao):
-        return render_template("partials/toast.html", {
-            "sucess": False,
-            "message": "Request incompleto, falta nome, CPF ou pontuação"
-        })
+        return render_template("partials/toast.html",
+            success=False,
+            message="Request incompleto, falta nome, CPF ou pontuação")
     
     insere_score(cpf, nome, pontuacao) # guarda score com timestamp
     return redirect(url_for(idle), code=302)
@@ -100,28 +97,25 @@ def score_get():
     cpf = request.args.get('cpf')
     nome = request.args.get('nome')
     if not (cpf or nome):
-        return render_template("partials/toast.html", {
-            "sucess": False,
-            "message": "Request incompleto, falta nome, CPF ou pontuação"
-        })
+        return render_template("partials/toast.html",
+            success=False,
+            message="Request incompleto, falta nome, CPF ou pontuação")
 
     scores = get_top_10()
     score_atual = get_score(cpf, nome) # score mais recente com esse cpf e nome
     # se score com cpf e nome está no top 10, destaca ela
     highlight = score_atual if score_atual in scores else None
-    return render_template("partials/top10.html", {
-        "scores": scores,
-        "highlight": highlight
-    })
+    return render_template("partials/top10.html",
+        scores=scores,
+        highlight=highlight)
 
 @app.route('/jogar')
 def jogar():
     saldo = get_saldo()
     if saldo < GAME_COST:
-        return render_template("partials/toast.html", {
-            "sucess": False,
-            "message": "Saldo insuficiente"
-        })
+        return render_template("partials/toast.html",
+            success=False,
+            message="Saldo insuficiente")
     
     cobra_jogo()
     return redirect(url_for(jogo), code=302)
