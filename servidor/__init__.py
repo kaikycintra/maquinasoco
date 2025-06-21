@@ -19,7 +19,7 @@ app = Flask(__name__)
 def run_web_server():
     """Executa o servidor Flask."""
     print("Iniciando servidor Flask...")
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=5000, debug=True)
 
 ############################# TELAS #############################
 
@@ -51,6 +51,7 @@ def gameover():
 
 @app.route('/saldo', methods=['GET'])
 def saldo():
+    # chamado repetidamente na tela idle
     saldo = get_saldo()
     return render_template("partials/saldo.html", {
         "saldo": saldo
