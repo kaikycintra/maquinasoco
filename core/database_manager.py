@@ -72,7 +72,7 @@ def get_saldo():
     return row['credits']
 
 def get_estado_banco():
-    """Retorna o estado atual da máquina (ex: 'IDLE', 'PUNCHED')."""
+    """Retorna o estado atual da máquina ('IDLE', 'READY_TO_PUNCH' ou 'PUNCHED')."""
     conn = _get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT current_state FROM machine_state WHERE id=1")
