@@ -16,8 +16,6 @@ def init_db():
     """
     conn = _get_db_connection()
     cursor = conn.cursor()
-    # Apaga a tabela score antiga se existir, para garantir que o novo esquema seja aplicado.
-    cursor.execute('DROP TABLE IF EXISTS score')
     
     # Tabela para armazenar pontuações com informações do jogador
     cursor.execute('''
@@ -33,15 +31,15 @@ def init_db():
     # Tabela para o estado da máquina, contém somente uma linha
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS machine_state (
-            id INTEGER PRIMARY KEY CHECK (id = 1),
-            current_state TEXT CHECK current_state IN('IDLE', 'READY_TO_PUNCH', 'PUNCHED'),
+            id INTEGER PRIMARY KEY CHECK (id = 1), 
+            current_state TEXT CHECK (current_state IN('IDLE', 'READY_TO_PUNCH', 'PUNCHED')),
             credits INTEGER NOT NULL DEFAULT 0,
-            acceleration REAL,
+            acceleration REAL
         )
     ''')
     
     # Garante que a linha de estado da máquina exista, inicializando-a se necessário.
-    cursor.execute("INSERT INTO machine_state (id, current_state, credits) VALUES (1, 'IDLE', 0)")
+    cursor.execute("INSERT OR IGNORE INTO machine_state (id, current_state, credits) VALUES (1, 'IDLE', 0)")
     
     conn.commit()
     conn.close()
