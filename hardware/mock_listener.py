@@ -1,4 +1,4 @@
-from core.database_manager import insere_soco, insere_credito, get_estado_banco
+from core.database_manager import insere_soco, insere_credito, get_estado_banco, cobra_jogo
 from pynput import keyboard
 
 def start_keyboard_mock_listener():
@@ -8,6 +8,7 @@ def start_keyboard_mock_listener():
     print("  '7': Inserir R$2.00")
     print("  '8': Inserir R$5.00")
     print("  '9': Inserir R$20.00")
+    print("  '5': Aperta START")
     print("  ESC: Sair do listener")
 
     def on_press(key):
@@ -29,6 +30,10 @@ def start_keyboard_mock_listener():
                 valor = 2 if char == '7' else (5 if char == '8' else 20)
                 insere_credito(valor)
                 print(f"Créditos (R${valor}) adicionados.")
+
+            elif char in ['5']:
+                cobra_jogo()
+                print("Botão START apertado.")
 
         except Exception as e:
             print(f"Erro ao processar tecla: {e}")

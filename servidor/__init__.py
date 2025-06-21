@@ -9,11 +9,11 @@ from core.database_manager import (
     get_saldo,
     get_estado_banco,
     get_leitura_acelerometro,
-    cobra_jogo,
     get_top_10,
     insere_score,
     get_score,
-    update_estado_idle)
+    update_estado_idle,
+    update_estado_press_start)
 
 app = Flask(__name__)
 
@@ -54,7 +54,13 @@ def gameover():
 def saldo():
     # chamado repetidamente na tela idle
     saldo = get_saldo()
+    estado = get_estado_banco()
+    if estado == "PRESS_START" or estado == "READY_TO_PUNCH":
+        return render_template("partials/saldo.html",
+            saldo=saldo, liberado=False) # saldo já foi verificado, não carregar botão de novo
+
     liberado = saldo >= GAME_COST
+    if liberado: update_estado_press_start()
     return render_template("partials/saldo.html",
         saldo=saldo, liberado=liberado)
 
@@ -92,7 +98,7 @@ def score_post():
             message="Request incompleto, falta nome, CPF ou pontuação")
     
     insere_score(cpf, nome, pontuacao) # guarda score com timestamp
-    return redirect(url_for(idle), code=302)
+    return redirect(url_for('idle'), code=302)
 
 @app.route('/score', methods=['GET'])
 def score_get():
@@ -111,13 +117,23 @@ def score_get():
         scores=scores,
         highlight=highlight)
 
-@app.route('/jogar')
+@app.route('/jogar', methods=['GET'])
 def jogar():
-    saldo = get_saldo()
-    if saldo < GAME_COST:
+    # tenta cobrar e verifica se o estado é 'READY_TO_PUNCH' ou 'INSUFFICIENT'
+    estado = get_estado_banco()
+    print(f"ESTADO: {estado}")
+    if estado == 'INSUFFICIENT':
+        update_estado_idle() # volta estado para 'IDLE', mostrando toast apenas uma vez
         return render_template("partials/toast.html",
             success=False,
             message="Saldo insuficiente")
     
-    cobra_jogo()
-    return redirect(url_for(jogo), code=302)
+    elif estado == "PRESS_START":
+        return Response(status=204)
+    
+    elif estado == 'READY_TO_PUNCH':
+        return render_template("pages/jogo.html")
+    
+    return render_template("partials/toast.html",
+            success=False,
+            message="ESTADO DO BANCO DESCONHECIDO")

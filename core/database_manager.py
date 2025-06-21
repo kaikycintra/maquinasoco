@@ -32,7 +32,7 @@ def init_db():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS machine_state (
             id INTEGER PRIMARY KEY CHECK (id = 1), 
-            current_state TEXT CHECK (current_state IN('IDLE', 'READY_TO_PUNCH', 'PUNCHED')),
+            current_state TEXT CHECK (current_state IN('IDLE', 'PRESS_START', 'INSUFFICIENT', 'READY_TO_PUNCH', 'PUNCHED')),
             credits INTEGER NOT NULL DEFAULT 0,
             acceleration REAL
         )
@@ -87,28 +87,6 @@ def get_leitura_acelerometro():
     conn.close()
     return row['acceleration']
 
-def cobra_jogo():
-    """
-    Deduz o custo de um jogo dos créditos e atualiza o estado da máquina para 'READY_TO_PUNCH'.
-    Retorna True se a cobrança for bem-sucedida, False caso contrário.
-    """
-    conn = _get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT credits FROM machine_state WHERE id=1")
-    row = cursor.fetchone()
-    
-    if not row or row['credits'] < GAME_COST:
-        conn.close()
-        print("Cobrança falhou: Saldo insuficiente.")
-        return False
-        
-    new_credits = row['credits'] - GAME_COST
-    cursor.execute("UPDATE machine_state SET credits = ?, current_state = 'READY_TO_PUNCH' WHERE id=1", (new_credits,))
-    conn.commit()
-    conn.close()
-    print(f"Jogo cobrado. Novo saldo: {new_credits}. Estado: READY_TO_PUNCH")
-    return True
-
 def insere_score(cpf, nome, pontuacao):
     """
     Guarda uma nova pontuação no banco de dados com o CPF e nome do jogador.
@@ -150,6 +128,13 @@ def update_estado_idle():
     conn.commit()
     conn.close()
 
+def update_estado_press_start():
+    conn = _get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE machine_state SET current_state = 'PRESS_START' where id=1")
+    conn.commit()
+    conn.close()
+
 
 ##################### OPERAÇÕES DO HARDWARE #####################
 
@@ -178,3 +163,32 @@ def insere_soco(force):
     conn.commit()
     print(f"Soco registrado com força {force}. Estado da máquina: PUNCHED.")
     conn.close()
+
+def cobra_jogo():
+    """
+    Deduz o custo de um jogo dos créditos e atualiza o estado da máquina para 'READY_TO_PUNCH' ou 'INSUFFICIENT'.
+    Retorna True se a cobrança for bem-sucedida, False caso contrário.
+    """
+    conn = _get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT credits, current_state FROM machine_state WHERE id=1")
+    row = cursor.fetchone()
+    
+    if row['current_state'] != 'PRESS_START':
+        conn.close()
+        print("Botão start ignorado, estado do banco incompatível")
+        return False
+
+    if not row or row['credits'] < GAME_COST:
+        cursor.execute("UPDATE machine_state SET current_state = 'INSUFFICIENT' WHERE id=1")
+        conn.commit()
+        conn.close()
+        print("Cobrança falhou: Saldo insuficiente.")
+        return False
+        
+    new_credits = row['credits'] - GAME_COST
+    cursor.execute("UPDATE machine_state SET credits = ?, current_state = 'READY_TO_PUNCH' WHERE id=1", (new_credits,))
+    conn.commit()
+    conn.close()
+    print(f"Jogo cobrado. Novo saldo: {new_credits}. Estado: READY_TO_PUNCH")
+    return True
