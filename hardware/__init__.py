@@ -1,9 +1,9 @@
 # Este módulo agora atua como um dispatcher para o listener de hardware apropriado.
-try:
-    import RPi.GPIO # Usado apenas para detectar a disponibilidade do Raspberry Pi
-    RASPBERRY_PI_AVAILABLE = True
-except ImportError:
-    RASPBERRY_PI_AVAILABLE = False
+#try:
+#    import RPi.GPIO # Usado apenas para detectar a disponibilidade do Raspberry Pi
+#    RASPBERRY_PI_AVAILABLE = True
+#except ImportError:
+RASPBERRY_PI_AVAILABLE = False
 
 def hardware_signal_listener():
     """
