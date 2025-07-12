@@ -20,9 +20,9 @@ def start_keyboard_mock_listener():
             if char in ['1', '2', '3']:
                 current_state = get_estado_banco()
                 if current_state == 'READY_TO_PUNCH':
-                    force = '3000' if char == '1' else ('5000' if char == '2' else '9000')
+                    score = 300 if char == '1' else (500 if char == '2' else 900)
                     print(f"Simulando soco (tecla '{char}' pressionada)...")
-                    insere_soco(force)
+                    insere_soco(score)
                 else:
                     print(f"Simulação de soco ignorada. Estado: {current_state}")
 
