@@ -22,7 +22,7 @@ def init_db():
         CREATE TABLE IF NOT EXISTS score (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-            force INTEGER,
+            score INTEGER,
             cpf TEXT,
             nome TEXT
         )
@@ -32,9 +32,9 @@ def init_db():
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS machine_state (
             id INTEGER PRIMARY KEY CHECK (id = 1), 
-            current_state TEXT CHECK (current_state IN('IDLE', 'PRESS_START', 'INSUFFICIENT', 'READY_TO_PUNCH', 'PUNCHED')),
+            current_state TEXT CHECK (current_state IN('IDLE', 'PRESS_START', 'INSUFFICIENT', 'READY_TO_PUNCH')),
             credits INTEGER NOT NULL DEFAULT 0,
-            acceleration REAL
+            score INTEGER
         )
     ''')
     
@@ -70,7 +70,7 @@ def get_saldo():
     return row['credits']
 
 def get_estado_banco():
-    """Retorna o estado atual da máquina ('IDLE', 'READY_TO_PUNCH' ou 'PUNCHED')."""
+    """Retorna o estado atual da máquina"""
     conn = _get_db_connection()
     cursor = conn.cursor()
     cursor.execute("SELECT current_state FROM machine_state WHERE id=1")
@@ -78,28 +78,28 @@ def get_estado_banco():
     conn.close()
     return row['current_state']
 
-def get_leitura_acelerometro():
-    """Busca a aceleração."""
+def get_score_temporario():
+    """Busca score do soco não salvo."""
     conn = _get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("SELECT acceleration FROM machine_state WHERE id=1")
+    cursor.execute("SELECT score FROM machine_state WHERE id=1")
     row = cursor.fetchone()
     conn.close()
-    return row['acceleration']
+    return row['score']
 
-def insere_score(cpf, nome, pontuacao):
+def insere_score(cpf: str, nome: str, pontuacao: int):
     """
     Guarda uma nova pontuação no banco de dados com o CPF e nome do jogador.
     """
     conn = _get_db_connection()
     cursor = conn.cursor()
     timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
-    cursor.execute("INSERT INTO score (cpf, nome, force, timestamp) VALUES (?, ?, ?, ?)", (cpf, nome, pontuacao, timestamp))
+    cursor.execute("INSERT INTO score (cpf, nome, score, timestamp) VALUES (?, ?, ?, ?)", (cpf, nome, pontuacao, timestamp))
     conn.commit()
     conn.close()
     print(f"Score guardado para {nome} ({cpf}): {pontuacao}")
 
-def get_score(cpf, nome):
+def get_score(cpf: str, nome: str):
     """
     Busca a pontuação mais recente de um jogador específico pelo CPF e nome.
     """
@@ -152,16 +152,16 @@ def insere_credito(valor: int):
     print(f"{valor} crédito(s) inserido(s). Novo saldo: {new_credits}.")
     conn.close()
 
-def insere_soco(force):
+def insere_soco(score: int):
     """
     Registra um soco no sistema.
-    Atualiza o estado da máquina para 'PUNCHED', registrando a força do soco.
+    Guarda o score no machine_state, muda estado para IDLE
     """
     conn = _get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("UPDATE machine_state SET current_state = 'PUNCHED', acceleration = ? WHERE id = 1", (force,))
+    cursor.execute("UPDATE machine_state SET current_state = 'IDLE', score = ? WHERE id = 1", (score,))
     conn.commit()
-    print(f"Soco registrado com força {force}. Estado da máquina: PUNCHED.")
+    print(f"Soco registrado com score {score}. Estado da máquina: IDLE.")
     conn.close()
 
 def cobra_jogo():
