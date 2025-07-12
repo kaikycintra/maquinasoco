@@ -1,7 +1,8 @@
 <main class="score-animation-container"
       hx-get="{{ url_for('gameover') }}"
-      hx-trigger="load delay:5s"
-      hx-swap="outerHTML">
+      hx-swap="outerHTML"
+      hx-trigger="fimanimacao"
+      id="animacao-container">
 
     <div id="score-display" class="score-display">0</div>
 
@@ -39,6 +40,7 @@
             const finalScore = {{ forca }};
             const scoreElement = document.getElementById('score-display');
             const levelElement = document.getElementById('punch-level-display');
+            const containerElement = document.getElementById('animacao-container');
 
             // 1. Seleciona todas as barras
             const bars = document.querySelectorAll('.tri-bar');
@@ -54,26 +56,36 @@
                 }
             });
 
-            // 3. Anima o contador de pontos (lógica inalterada)
+            // 3. Anima o contador de pontos
             if (finalScore === 0) {
                 scoreElement.innerText = '0';
                 levelElement.classList.add('visible');
+                // Se a pontuação for 0, aciona a transição após um curto atraso
+                setTimeout(() => htmx.trigger(containerElement, 'fimanimacao'), 2000);
                 return;
             }
+            
             let currentScore = 0;
             const duration = 1500;
             const increment = Math.ceil(finalScore / (duration / 16));
+            
             function updateScore() {
                 currentScore += increment;
                 if (currentScore >= finalScore) {
                     scoreElement.innerText = finalScore;
                     scoreElement.classList.add('final');
                     levelElement.classList.add('visible');
+
+                    // Aciona a transição de página após um atraso para o jogador ver a pontuação
+                    setTimeout(() => {
+                        htmx.trigger(containerElement, 'fimanimacao');
+                    }, 2000); // Atraso de 2 segundos
                 } else {
                     scoreElement.innerText = currentScore;
                     requestAnimationFrame(updateScore);
                 }
             }
+            
             updateScore();
         })();
     </script>
