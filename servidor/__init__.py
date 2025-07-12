@@ -1,15 +1,15 @@
-import time
+from core.config import GAME_COST
 
 from flask import Flask, render_template, redirect, url_for, Response, request
-from core.config import GAME_COST
+from hardware.scorecalc import scorecalc
 from core.database_manager import (
     reset_banco,
     get_saldo,
     get_estado_banco,
-    get_leitura_acelerometro,
     get_top_10,
     insere_score,
     get_score,
+    get_score_temporario,
     update_estado_idle,
     update_estado_press_start)
 
@@ -65,14 +65,8 @@ def saldo():
 
 @app.route('/checksoco', methods=['GET'])
 def checksoco():
-    # chamado repetidamente na tela de jogo
-    estado = get_estado_banco()
-    if estado == "PUNCHED":
-        time.sleep(1) # delay para atualizar leitura do acelerômetro
-        forca = get_leitura_acelerometro()
-        return render_template("partials/animacao_soco.html", forca=forca)
-
-    return Response(status=204)
+    score = scorecalc() # espera soco e devolve o score
+    return render_template("partials/animacao_soco.html", forca=score)
 
 #############################  OUTROS ############################
 
@@ -87,13 +81,13 @@ def reset():
 def score_post():
     cpf = request.form.get('cpf')
     nome = request.form.get('nome')
-    pontuacao = request.form.get('pontuacao')
-    if not (nome or cpf or pontuacao):
+    score = get_score_temporario()
+    if not (nome or cpf or score):
         return render_template("partials/toast.html",
             success=False,
             message="Request incompleto, falta nome, CPF ou pontuação")
     
-    insere_score(cpf, nome, pontuacao) # guarda score com timestamp
+    insere_score(cpf, nome, score) # guarda score com timestamp
     return redirect(url_for('idle'), code=302)
 
 @app.route('/score', methods=['GET'])
@@ -115,7 +109,7 @@ def score_get():
 
 @app.route('/jogar', methods=['GET'])
 def jogar():
-    # tenta cobrar e verifica se o estado é 'READY_TO_PUNCH' ou 'INSUFFICIENT'
+    # verifica o banco para a transição da tela de jogo
     estado = get_estado_banco()
     print(f"ESTADO: {estado}")
     if estado == 'INSUFFICIENT':
