@@ -5,6 +5,9 @@
       hx-get="{{ url_for('idle') }}"
       hx-trigger="load delay:20s"
       hx-swap="outerHTML">
+    <audio src="{{ url_for('static', filename='gameover.mp3') }}" autoplay loop>
+            O browser não suporta áudio
+    </audio>
 
     <h1>FIM DE JOGO</h1>
     

@@ -2,6 +2,9 @@
       hx-get="{{ url_for('checksoco') }}"
       hx-trigger="load, every 1s"
       hx-swap="outerHTML">
+    <audio src="{{ url_for('static', filename='soque.mp3') }}" autoplay loop>
+            O browser não suporta áudio
+    </audio>
 
     <h1 class="titulo-jogo"
         style="align-self: center;">

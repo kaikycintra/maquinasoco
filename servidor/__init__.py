@@ -66,7 +66,7 @@ def saldo():
 @app.route('/checksoco', methods=['GET'])
 def checksoco():
     score = scorecalc() # espera soco e devolve o score
-    return render_template("partials/animacao_soco.html", forca=score)
+    return render_template("pages/animacao_soco.html", forca=score)
 
 #############################  OUTROS ############################
 

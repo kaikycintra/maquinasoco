@@ -3,6 +3,9 @@
       hx-swap="outerHTML"
       hx-trigger="fimanimacao"
       id="animacao-container">
+    <audio src="{{ url_for('static', filename='brasil.mp3') }}" autoplay loop>
+            O browser não suporta áudio
+    </audio>
 
     <div id="score-display" class="score-display">0</div>
 
