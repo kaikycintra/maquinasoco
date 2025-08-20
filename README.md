@@ -40,7 +40,7 @@ Este design permite que a interface mude não apenas com cliques, mas também em
     ```
 
 3.  **Conecte e configure o acelerômetro:**
-    Conecte o seu acelerômetro MPU-6050 na Raspberry Pi [ative comunicação i2c]([https://github.com/m-rtijn/mpu6050/blob/master/README.rst](https://www.raspberrypi-spy.co.uk/2014/11/enabling-the-i2c-interface-on-the-raspberry-pi/)), se desativada.
+    Conecte o seu acelerômetro MPU-6050 na Raspberry Pi [ative comunicação i2c](https://www.raspberrypi-spy.co.uk/2014/11/enabling-the-i2c-interface-on-the-raspberry-pi/), se desativada.
 
 ## ▶️ Executando
 
